@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>HAKIOS</title>
+<style>
+:root{--glass:rgba(255,255,255,.17);--line:rgba(255,255,255,.22)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:white;background:#090d1c}
+.screen{position:absolute;inset:0;display:none;overflow:hidden}
+#boot{display:flex;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(circle at 50% 35%,#283b70,#090d1c 65%)}
+.apple{font-size:86px;filter:drop-shadow(0 8px 20px #0008);animation:pop 1.2s ease}
+@keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.bootline{position:absolute;bottom:14%;width:120px;height:4px;border-radius:8px;background:#ffffff35;overflow:hidden}
+.bootline:after{content:"";display:block;height:100%;width:40%;background:white;border-radius:8px;animation:load 2.2s ease-in-out forwards}
+@keyframes load{to{width:100%}}
+#lock,#home,#panel,#settings,#appview{background:linear-gradient(150deg,#1c3672 0%,#526ab1 45%,#b26b9c 100%)}
+#lock{display:flex;align-items:center;flex-direction:column;text-align:center;padding-top:17vh}
+.time{font-size:76px;font-weight:200;letter-spacing:-4px}.date{font-size:18px;margin-top:3px}
+.lockhint{position:absolute;bottom:8%;font-size:13px;color:#ffffffc9}
+#home{padding:52px 20px 28px;background:linear-gradient(145deg,#101d45,#395b9e 52%,#b56f9b)}
+.status{position:absolute;top:13px;left:22px;right:22px;display:flex;justify-content:space-between;font-size:13px;font-weight:600;z-index:3}
+.island{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:105px;height:27px;border-radius:18px;background:#050505;z-index:4}
+.widgets{margin:32px 0 28px;padding:17px;border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(18px);border-radius:22px}
+.wtime{font-size:34px;font-weight:300}.weather{font-size:13px;opacity:.85;margin-top:4px}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:23px 12px}
+.app{border:0;background:none;color:white;text-align:center;font-size:11px;padding:0}
+.ico{width:57px;height:57px;border-radius:15px;margin:0 auto 6px;display:grid;place-items:center;font-size:29px;background:linear-gradient(145deg,#ffffff55,#ffffff18);border:1px solid #ffffff30;box-shadow:0 8px 18px #0002}
+.dock{position:absolute;bottom:17px;left:17px;right:17px;padding:12px 10px;border-radius:25px;background:#ffffff35;backdrop-filter:blur(20px);display:flex;justify-content:space-around}
+.dock .ico{margin:0}
+.card{position:absolute;inset:0;padding:55px 20px 24px;background:linear-gradient(160deg,#1c2d58,#5e73a8);overflow:auto}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:25px}
+.back{border:0;border-radius:20px;padding:9px 14px;background:#ffffff24;color:white;font-size:15px}
+.tile{padding:17px;border-radius:18px;background:#ffffff1c;border:1px solid #ffffff20;margin:12px 0}
+.row{display:flex;justify-content:space-between;align-items:center}
+.switch{width:43px;height:25px;border-radius:20px;background:#34c759;display:inline-block;position:relative}
+.switch:after{content:"";position:absolute;width:21px;height:21px;right:2px;top:2px;border-radius:50%;background:white}
+#panel{padding:60px 20px;background:linear-gradient(150deg,#121a36,#526da9)}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.control{padding:22px 15px;border-radius:20px;background:#ffffff25;border:1px solid #ffffff24;text-align:center;font-size:14px}
+#appview .card{position:absolute}
+.big{font-size:32px;font-weight:300}
+.small{opacity:.8;font-size:13px}
+button{cursor:pointer}
+</style></head>
+<body>
+<section id="boot" class="screen"><div class="apple"></div><div style="font-size:14px;letter-spacing:4px;margin-top:14px">HAKIOS</div><div class="bootline"></div></section>
+<section id="lock" class="screen" onclick="goHome()"><div class="time" id="clock">9:41</div><div class="date" id="date">Friday, November 13</div><div class="lockhint">Geser / ketuk untuk membuka</div></section>
+<section id="home" class="screen">
+<div class="status"><span id="statusTime">9:41</span><span>●●●  ▰  100%</span></div><div class="island"></div>
+<div class="widgets"><div class="wtime" id="widgetTime">9:41</div><div class="weather">Cuaca cerah · HAKIOS Demo</div><div class="small" style="margin-top:12px">Selamat datang kembali 👋</div></div>
+<div class="apps" id="apps"></div>
+<div class="dock">
+<button class="app" onclick="openApp('Phone')"><div class="ico">📞</div></button>
+<button class="app" onclick="openApp('Safari')"><div class="ico">🧭</div></button>
+<button class="app" onclick="openApp('Messages')"><div class="ico">💬</div></button>
+<button class="app" onclick="openApp('Music')"><div class="ico">🎵</div></button>
+</div></section>
+<section id="panel" class="screen"><div class="top"><button class="back" onclick="show('home')">✕</button><b>Control Center</b></div><div class="controls">
+<div class="control" onclick="toggle(this)">✈️<br>Airplane Mode</div><div class="control" onclick="toggle(this)">📶<br>Wi-Fi</div>
+<div class="control" onclick="toggle(this)">🔵<br>Bluetooth</div><div class="control" onclick="toggle(this)">🌙<br>Focus</div>
+<div class="control" onclick="toggle(this)">🔒<br>Rotation Lock</div><div class="control" onclick="toggle(this)">🔦<br>Flashlight</div>
+</div><div class="tile" style="margin-top:18px">☀️ Brightness <input type="range" min="10" max="100" value="80" style="width:100%"></div><div class="tile">🔊 Volume <input type="range" min="0" max="100" value="65" style="width:100%"></div></section>
+<section id="settings" class="screen"><div class="card"><div class="top"><button class="back" onclick="show('home')">‹</button><h2>Settings</h2></div>
+<div class="tile"><div class="big">HAKIOS</div><div class="small">iOS-inspired Android simulator</div></div>
+<div class="tile row">✈️ Airplane Mode <span class="switch"></span></div><div class="tile row">📶 Wi-Fi <span>Connected</span></div><div class="tile row">🔵 Bluetooth <span class="switch"></span></div><div class="tile row">🔔 Notifications <span>›</span></div><div class="tile row">🌙 Display & Brightness <span>›</span></div><div class="tile row">🔋 Battery <span>100%</span></div><div class="tile row">ℹ️ About HAKIOS <span>Version 1.0</span></div></div></section>
+<section id="appview" class="screen"><div class="card"><div class="top"><button class="back" onclick="show('home')">‹ Home</button><h2 id="appTitle">App</h2></div><div id="appBody" class="tile"></div></div></section>
+<script>
+const names=[['Photos','🌄'],['Camera','📷'],['Calendar','📅'],['Clock','⏰'],['Maps','🗺️'],['Weather','🌤️'],['Notes','📝'],['Reminders','✅'],['Settings','⚙️'],['App Store','🅰️'],['Health','❤️'],['Files','📁']];
+const apps=document.getElementById('apps');
+names.forEach(([n,e])=>{let b=document.createElement('button');b.className='app';b.innerHTML=`<div class="ico">${e}</div>${n}`;b.onclick=()=>n==='Settings'?show('settings'):openApp(n);apps.appendChild(b)});
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block'}
+function goHome(){show('home')}
+function toggle(el){el.style.background=el.dataset.on==='1'?'#ffffff25':'#2878ed';el.dataset.on=el.dataset.on==='1'?'0':'1'}
+function openApp(n){document.getElementById('appTitle').textContent=n;let body=document.getElementById('appBody');let content={
+'Photos':'📸<br><br>Belum ada foto di simulasi HAKIOS.',
+'Camera':'📷<br><br>Kamera demo — fitur kamera asli belum dihubungkan.',
+'Calendar':'📅<br><br>Kalender HAKIOS<br>Hari ini: '+new Date().toLocaleDateString('id-ID'),
+'Clock':'⏰<br><br>'+new Date().toLocaleTimeString('id-ID'),
+'Maps':'🗺️<br><br>Peta demo.',
+'Weather':'🌤️<br><br>Cuaca demo. Tidak mengambil data cuaca live.',
+'Notes':'📝<br><textarea placeholder="Tulis catatan..." style="width:100%;height:140px;border-radius:12px;padding:10px"></textarea>',
+'Reminders':'✅<br><br>Daftar pengingat demo.',
+'App Store':'🅰️<br><br>HAKIOS App Store (demo).',
+'Health':'❤️<br><br>Health dashboard demo.',
+'Files':'📁<br><br>File manager demo.',
+'Phone':'📞<br><br>Dialer demo — tidak melakukan panggilan.',
+'Safari':'🧭<br><br>Browser demo.',
+'Messages':'💬<br><br>Pesan demo.',
+'Music':'🎵<br><br>Music player demo.'
+};body.innerHTML=content[n]||'Aplikasi '+n+' versi demo.';show('appview')}
+function tick(){let d=new Date(),t=d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});['clock','widgetTime','statusTime'].forEach(id=>document.getElementById(id).textContent=t);document.getElementById('date').textContent=d.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'});}
+tick();setInterval(tick,1000);show('boot');setTimeout(()=>show('lock'),2600);
+let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientY,{passive:true});document.addEventListener('touchend',e=>{let dy=e.changedTouches[0].clientY-sx;if(sx<55&&dy>70&&document.getElementById('home').style.display==='block')show('panel');else if(dy< -70&&document.getElementById('lock').style.display==='block')goHome()},{passive:true});
+</script></body></html>
